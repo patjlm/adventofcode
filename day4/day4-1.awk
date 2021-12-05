@@ -4,9 +4,9 @@ BEGIN {
 
 /([0-9]+,)+/ {
     split($0, numbers1, ",")
-    for (i in numbers1) {
-        numbers[numbers1[i]] = ""
-    }
+    # for (i in numbers1) {
+    #     numbers[numbers1[i]] = ""
+    # }
     next
 }
 
@@ -29,6 +29,33 @@ BEGIN {
     next
 }
 
+function win(rows_or_cols, b) {
+    for (i in rows_or_cols[b]) {
+        all_called = 1
+        for (n in rows_or_cols[b][i]) {
+            if (! called[b][n]) {
+                all_called = 0
+            }
+        }
+        if (all_called) {
+            return 1
+        }
+    }
+    return 0
+}
+
+function result(b) {
+    sum = 0
+    for (i in boards[b]) {
+        if (!(called[b][i])) {
+            sum += i
+        }
+    }
+    print "sum "sum
+    print "nb "nb
+    print sum * nb
+}
+
 END {
     for (i in numbers1) {
         nb = numbers1[i]
@@ -36,47 +63,9 @@ END {
             if (nb in boards[b]) {
                 called[b][nb] = 1
             }
-            for (row in rows[b]) {
-                all_called = 1
-                for (n in rows[b][row]) {
-                    if (called[b][n] == 0) {
-                        all_called = 0
-                    }
-                }
-                if (all_called == 1) {
-                    sum = 0
-                    for (i in boards[b]) {
-                        if (!(called[b][i])) {
-                            sum += i
-                        }
-                    }
-                    print "sum "sum
-                    print "nb "nb
-                    print sum * nb
-                    exit 0
-                }
-            }
-            for (col in cols[b]) {
-                all_called = 1
-                for (n in cols[b][col]) {
-                    if (called[b][n] == 0) {
-                        all_called = 0
-                    }
-                }
-                if (all_called == 1) {
-                    for (i in rows[b]) {
-                    }
-                    sum = 0
-                    for (i in boards[b]) {
-                        if (!(called[b][i])) {
-                            sum += i
-                        }
-                    }
-                    print "sum "sum
-                    print "nb "nb
-                    print sum * nb
-                    exit 0
-                }
+            if (win(rows, b) || win(cols, b)) {
+                result(b)
+                exit 0
             }
         }
     }
