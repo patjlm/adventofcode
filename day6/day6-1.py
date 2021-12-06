@@ -4,6 +4,7 @@ with open('input.txt', 'r') as f:
 inputs = list(map(int, input_line.split(',')))
 
 count = [0]*9
+# not using this as we'd traverse inputs 9 times instead of 1
 # for i in range(9):
 #     count[i] = inputs.count(i)
 for i in inputs:
@@ -11,11 +12,10 @@ for i in inputs:
 
 for day in range(80):
     spawned = count[0]
-    for i in range(6):
+    for i in range(8):
         count[i] = count[i+1]
-    count[6] = count[7] + spawned
-    count[7] = count[8]
-    count[8] = spawned
+    count[6] += spawned  # parents reset
+    count[8] = spawned  # new borns
 
 print(sum(count))
 

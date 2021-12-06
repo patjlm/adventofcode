@@ -51,8 +51,8 @@ function result(b, nb) {
             sum += i
         }
     }
-    print "sum "sum
-    print "nb "nb
+    # print "sum "sum
+    # print "nb "nb
     print sum * nb
 }
 

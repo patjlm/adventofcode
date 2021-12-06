@@ -1,9 +1,11 @@
 with open('day3.input', 'r') as f:
   inputs = f.read().strip().split('\n')
 
+
+# sum of ones in each column
 ones = list(map(lambda x: sum(map(int, x)), zip(*inputs)))
 
-
+input_bins = [int(i, 2) for i in inputs]
 
 nb_inputs = len(input_bins)
 bin_size = 12
