@@ -44,7 +44,7 @@ function win(rows_or_cols, b) {
     return 0
 }
 
-function result(b) {
+function result(b, nb) {
     sum = 0
     for (i in boards[b]) {
         if (!(called[b][i])) {
@@ -64,7 +64,7 @@ END {
                 called[b][nb] = 1
             }
             if (win(rows, b) || win(cols, b)) {
-                result(b)
+                result(b, nb)
                 exit 0
             }
         }
