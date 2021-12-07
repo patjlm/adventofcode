@@ -5,8 +5,6 @@ BEGIN {
 }
 
 /[0-9]+/ {
-    # if (min == -1 || $1 < min) min = $1
-    # if (max == -1 || $1 > max) max = $1
     count[$1] += 1
     sum += $1+0
     total += 1
