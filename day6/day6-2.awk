@@ -1,8 +1,8 @@
+BEGIN {
+    RS = ","
+}
 {
-    split($0, inputs, ",")
-    for (i in inputs) {
-        count[inputs[i]] += 1
-    }
+    count[$1] += 1
 }
 END {
     for (day=0; day<256; day++) {
