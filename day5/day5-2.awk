@@ -15,7 +15,7 @@ BEGIN {
     stepy = y1 == y2 ? 0 : sign(y2-y1)
     x = x1
     y = y1
-    for (; x != x2 || y != y2;) {
+    while (x != x2 || y != y2) {
         POINT[x","y] += 1
         x += stepx
         y += stepy
