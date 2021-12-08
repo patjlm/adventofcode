@@ -7,36 +7,45 @@ segments = {}
 sum=0
 for signal_patterns, output_digits in parse():
     patterns = sorted(signal_patterns.split(), key=len)
-    s = [set(p) for p in patterns]
+    inputs = [set(p) for p in patterns]
 
-    segments[1] = s[0]
-    segments[7] = s[1]
-    segments[4] = s[2]
-    segments[8] = s[9]
+    # find patterns for 1, 7, 4 and 8
+    segments[1] = inputs[0]
+    segments[7] = inputs[1]
+    segments[4] = inputs[2]
+    segments[8] = inputs[9]
 
-    for segs in [s[6], s[7], s[8]]:  # len = 6
-        if len(segs & segments[4]) == 4:
-            segments[9] = segs
-        elif len(segs & segments[1]) == 1:
-            segments[6] = segs
+    # find patterns for 9, 6, 0 which have 6 segments each
+    for input in [inputs[6], inputs[7], inputs[8]]:
+        if len(input & segments[4]) == 4:
+            segments[9] = input
+        elif len(input & segments[1]) == 1:
+            segments[6] = input
         else:
-            segments[0] = segs
+            segments[0] = input
 
-    for segs in [s[3], s[4], s[5]]:  # len = 5
-        if len(segs & segments[1]) == 2:
-            segments[3] = segs
-        elif len(segs - segments[9]) == 0:
-            segments[5] = segs
+    # find patterns for 3, 5, 2 which have 5 segments each
+    for input in [inputs[3], inputs[4], inputs[5]]:
+        if len(input & segments[1]) == 2:
+            segments[3] = input
+        elif len(input - segments[9]) == 0:
+            segments[5] = input
         else:
-            segments[2] = segs
+            segments[2] = input
 
-    revert = {''.join(sorted(v)): k for k, v in segments.items()}
+    # sorts the characters of a string
+    sort = lambda s: ''.join(sorted(s))
 
-    outputs = list(map(lambda s: ''.join(sorted(s)), output_digits.split()))
-    out = revert[outputs[0]] * 1000 + \
-          revert[outputs[1]] * 100 + \
-          revert[outputs[2]] * 10 + \
-          revert[outputs[3]]
+    # digit for each (sorted) pattern
+    digits = {sort(v): k for k, v in segments.items()}
+
+    # list of (sorted) output patterns
+    outputs = list(map(sort, output_digits.split()))
+
+    out = digits[outputs[0]] * 1000 + \
+          digits[outputs[1]] * 100 + \
+          digits[outputs[2]] * 10 + \
+          digits[outputs[3]]
     sum += out
 
 print(sum)

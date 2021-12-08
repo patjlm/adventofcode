@@ -4,9 +4,9 @@ def parse():
             yield line.strip().split(' | ')[1].split()
 
 count = 0
-for digits in parse():
-    for d in digits:
-        if len(d) in [2, 3, 4, 7]:
+for patterns in parse():
+    for pattern in patterns:
+        if len(pattern) in [2, 3, 4, 7]:
             count += 1
 
 print(count)
