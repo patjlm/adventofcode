@@ -8,38 +8,27 @@ BEGIN {
 
 /./ {
     nb_opened = 0
-    print $0
-    for (i=1; i<=NR; i++) {
-        printf "char " $i ": "
-        incomplete = 1
-        if ($i in OPENING) {
-            opened[++nb_opened] = $i
-            print "  opened(" nb_opened ") : " $i
-        }
-        else {
-            if (opened[nb_opened] != CLOSING[$i]) {
-                incomplete = 0
-                break
-            }
-            print $i " --> pop "opened[nb_opened]
-            nb_opened--
-        }
+    for (i=1; i<=NF; i++) {
+        if ($i in OPENING) opened[++nb_opened] = $i
+        else if (opened[nb_opened--] != CLOSING[$i]) next
     }
-    if (incomplete) {
-        printf " --> "
-        score = 0
-        for (i=nb_opened; i>0; i--) {
-            c = OPENING[opened[i]]
-            printf c
-            score *= 5
-            score += POINTS[c]
-        }
-        print ""
-        SCORES[++NB_SCORES] = score
+    score = 0
+    for (i=nb_opened; i>0; i--) {
+        c = OPENING[opened[i]]
+        score *= 5
+        score += POINTS[c]
     }
+    SCORES[++NB_SCORES] = score
+}
+
+function ceil(x, y) {
+    y = int(x)
+    return (x+0 > y ? y+1 : y)
 }
 
 END {
-    for (score in SCORES) printf SCORES[score] ", "
-    print ""
+    asort(SCORES)
+    print SCORES[ceil(length(SCORES)/2)]
 }
+
+# 2776842859

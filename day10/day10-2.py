@@ -33,4 +33,4 @@ for line in parse():
 
 print(sorted(scores)[ceil(len(scores)/2)])
 
-# > 2776842859
+# 2776842859
