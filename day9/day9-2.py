@@ -1,21 +1,5 @@
 from  dataclasses import dataclass
-from typing import Any, List
-import sys
-
-class Basin():
-    
-    def __init__(self, id: int) -> None:
-        self.id = id
-        self.points = []
-
-    def __str__(self):
-        return f'{self.id}({len(self.points)})'
-
-    def __repr__(self):
-        return f'{self.id}({len(self.points)})'
-
-    def add(self, point):
-        self.points.append(point)
+from typing import List
 
 
 @dataclass
@@ -23,14 +7,7 @@ class Point():
     height: int
     row: int
     col: int
-    lowest: bool = False
-    basin: Basin = None
-
-    def __str__(self):
-        return f'({self.row},{self.col})'
-
-    def __repr__(self):
-        return f'({self.row},{self.col})'
+    basin: bool = False
 
     def adjacents(self, point_map):
         adj = []
@@ -44,21 +21,15 @@ class Point():
             adj.append(point_map[self.row][self.col+1])
         return adj
 
-    def discover_basin(self, basin: Basin, point_map):
+    def discover_basin(self, point_map):
         if self.height == 9:
-            return
-        if self.basin:
-            raise Exception(f'Point already in a basin {self.basin}: {self}')
-        self.basin = basin
-        basin.add(self)
+            return 0
+        self.basin = True
+        size = 1
         for adj in self.adjacents(point_map):
-            if adj.basin:
-                if adj.basin.id == basin.id: # already in that basin
-                    continue
-                else:
-                    raise Exception(f'Point {adj} already in a basin {adj.basin}. '
-                                    f'Cannot be added in basin {basin}')
-            adj.discover_basin(basin, point_map)
+            if not adj.basin:
+                size += adj.discover_basin(point_map)
+        return size
 
 
 def parse() -> List[Point]:
@@ -70,23 +41,15 @@ def parse() -> List[Point]:
 
 point_map = [l for l in parse()]
 
-basins = []
-for row, points in enumerate(point_map):
-    for col, point in enumerate(points):
-        if point.height < 9 and point.basin is None:
-            basin = Basin(len(basins))
-            basins.append(basin)
-            point.discover_basin(basin, point_map)
+basin_sizes = []
+for points in point_map:
+    for point in points:
+        if point.height < 9 and not point.basin:
+            basin_sizes.append(point.discover_basin(point_map))
 
-for i, b in enumerate(basins):
-    print(f'basin {i+1}: {len(b.points)}')
+sizes = sorted(basin_sizes, reverse=True)
+result = sizes[0] * sizes[1] * sizes[2]
 
-sorted_basins = sorted(basins, key=lambda b: len(b.points), reverse=True)
-result = len(sorted_basins[0].points) * \
-         len(sorted_basins[1].points) * \
-         len(sorted_basins[2].points)
-
-print(f'{len(sorted_basins[0].points)}, {len(sorted_basins[1].points)}, {len(sorted_basins[2].points)}')
 print(result)
 
 # 1142757
