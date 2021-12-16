@@ -1,6 +1,10 @@
 from dataclasses import dataclass
 
-weights = [[*map(int, l[:-1])] for l in open(0)]
+weights = []
+with open('/Users/patmarti/dev/adventofcode/day15/input.txt', 'r') as f:
+  for line in f:
+    weights.append(list(map(int, line.strip())))
+
 rows = len(weights)
 cols = len(weights[0])
 

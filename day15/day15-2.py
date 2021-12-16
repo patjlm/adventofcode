@@ -1,10 +1,13 @@
 from dataclasses import dataclass
 
-weights = [[*map(int, l[:-1])] for l in open(0)]
+weights = []
+with open('/Users/patmarti/dev/adventofcode/day15/input.txt', 'r') as f:
+  for line in f:
+    weights.append(list(map(int, line.strip())))
+
 rows = len(weights)
 cols = len(weights[0])
 
-print(f'rows={rows} ; cols={cols}')
 
 @dataclass
 class Node():
@@ -19,6 +22,7 @@ class Node():
 
   def __ge__(self, other):
     return not self.__lt__(other)
+
 
 data = [
         [ Node(((s%10)+1 if (s := weights[row][col]+repeat_row+repeat_col) > 9 else s), row+repeat_row*rows, col+repeat_col*cols)
