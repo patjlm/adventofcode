@@ -97,7 +97,7 @@ def search_max(instructions_id=0, z0=0):
     if instructions_id <= 4:
         spin()
 
-    for n in range(9, 0, -1):
+    for n in range(10):
         z = run2(instructions_id, z0, n)
         if z is None:  # invalid instruction (divide by 0)
             print('invalid instruction')
@@ -120,4 +120,4 @@ if not numbers:
 
 print(''.join(map(str, numbers)))
 
-# 92793949489995
+# 51131616112781
